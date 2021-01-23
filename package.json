@@ -4,9 +4,13 @@
   "main": "withBasicServer/basicServer.js",
   "license": "MIT",
   "scripts": {
-    "start": "node withBasicServer/basicServer.js"
+    "start": "node withBasicServer/basicServer.js",
+    "dev": "nodemon withBasicServer/basicServer.js"
   },
   "dependencies": {
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
   }
 }
