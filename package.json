@@ -1,0 +1,12 @@
+{
+  "name": "node-sand-box",
+  "version": "1.0.0",
+  "main": "withBasicServer/basicServer.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node withBasicServer/basicServer.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
