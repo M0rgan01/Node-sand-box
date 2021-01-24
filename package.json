@@ -1,14 +1,18 @@
 {
   "name": "node-sand-box",
   "version": "1.0.0",
-  "main": "withBasicServer/basicServer.js",
+  "main": "learn/withBasicServer/basicServer.js",
   "license": "MIT",
+  "type": "module",
   "scripts": {
-    "start": "node withBasicServer/basicServer.js",
-    "dev": "nodemon withBasicServer/basicServer.js"
+    "start": "node learn/withBasicServer/basicServer.js",
+    "dev": "nodemon learn/withBasicServer/basicServer.js"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "body-parser": "^1.19.0",
+    "express-session": "^1.17.1",
+    "keycloak-connect": "^12.0.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"
