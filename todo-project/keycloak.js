@@ -13,13 +13,22 @@ const keycloakConfig = {
   },
 };
 
+export const memoryStore = new session.MemoryStore();
+
+export function hasAdminRole(token, request) {
+  return token.hasRealmRole('admin');
+}
+
+export function hasUserRole(token, request) {
+  return token.hasRealmRole('user') || token.hasRealmRole('admin');
+}
+
 export function initKeycloak() {
   if (keycloakInstance) {
     console.warn("Trying to init Keycloak again!");
     return keycloakInstance;
   } else {
     console.log("Initializing Keycloak...");
-    const memoryStore = new session.MemoryStore();
     keycloakInstance = new Keycloak({ store: memoryStore }, keycloakConfig ? keycloakConfig : undefined);
     return keycloakInstance;
   }
