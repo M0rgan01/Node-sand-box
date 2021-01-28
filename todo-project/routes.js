@@ -1,42 +1,13 @@
 import { initKeycloak, hasAdminRole } from './keycloak.js';
 import express from 'express';
+import fs from 'fs';
+
 
 const keycloakInstance = initKeycloak();
 const basePath = '/todoAPI/';
 const router = express.Router();
 
-const initialState = [
-  {
-    id: 1,
-    title: 'Title1',
-    complete: false,
-  },
-  {
-    id: 2,
-    title: 'Title2',
-    complete: true,
-  },
-  {
-    id: 3,
-    title: 'Title3',
-    complete: true,
-  },
-  {
-    id: 4,
-    title: 'Title4',
-    complete: false,
-  },
-  {
-    id: 5,
-    title: 'Title5',
-    complete: true,
-  },
-  {
-    id: 6,
-    title: 'Title6',
-    complete: false,
-  },
-];
+const initialState = JSON.parse(fs.readFileSync('todos.json', 'utf8'));
 
 router.get('/todos', keycloakInstance.protect(hasAdminRole), (req, resp) => {
   resp.json(initialState);
