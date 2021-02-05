@@ -1,16 +1,13 @@
 import { initKeycloak, hasAdminRole } from './keycloak.js';
 import express from 'express';
-import fs from 'fs';
-
+import Todo from './database/models/todo.js';
 
 const keycloakInstance = initKeycloak();
-const basePath = '/todoAPI/';
 const router = express.Router();
 
-const initialState = JSON.parse(fs.readFileSync('todos.json', 'utf8'));
-
-router.get('/todos', keycloakInstance.protect(hasAdminRole), (req, resp) => {
-  resp.json(initialState);
+router.get('/todos', keycloakInstance.protect(hasAdminRole), async (req, resp) => {
+  const todos = await Todo.findAll();
+  resp.json(todos);
 });
 
 router.get('/todo/id', (req, resp) => {
