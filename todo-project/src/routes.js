@@ -7,15 +7,19 @@ const router = express.Router();
 
 router.get('/todos', keycloakInstance.protect(hasAdminRole), async (req, resp) => {
   const todos = await Todo.findAll();
-  resp.json(todos);
+  resp.status(200).json(todos);
 });
 
-router.get('/todo/id', (req, resp) => {
-  resp.send('Salut ! tu es à la racine');
+router.put('/todo/id', keycloakInstance.protect(hasAdminRole), async (req, resp) => {
+  const todo = req.body.title;
+  await Todo.update(todo, { where: { id: todo.id } });
+  resp.status(200).send();
 });
 
-router.post('/todo', (req, resp) => {
-  resp.send('Salut ! tu es à la racine');
+router.post('/todo', keycloakInstance.protect(hasAdminRole), async (req, resp) => {
+  const todo = req.body;
+  await Todo.create({ id: todo.id, title: todo.title,  complete: false});
+  resp.status(201).send();
 });
 
 router.put('/todo', (req, resp) => {
