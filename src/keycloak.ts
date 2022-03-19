@@ -30,6 +30,7 @@ export function getKeycloak() {
       { store: memoryStore },
       keycloakConfig
     );
+    logger.info('Keycloak instance has been created.');
   }
   return keycloakInstance;
 }

@@ -11,17 +11,6 @@ import logger from './config/logger';
 const app = express();
 const keycloakInstance = getKeycloak();
 
-// ---------- DATABASE / FIXTURES ----------
-db.authenticate()
-  .then(() => {
-    logger.info('Successful authenticate to database !');
-  })
-  .catch((error) => {
-    logger.crit('Error when trying to connect database : ' + error);
-  });
-
-(async () => await insertTodos())();
-
 // ---------- SECURITY ----------
 app.use(cors());
 app.use(
@@ -38,17 +27,41 @@ app.use(keycloakInstance.middleware());
 // to support JSON-encoded bodies
 app.use(express.json);
 
-
 // ---------- ROUTING ----------
 app.use('/todoAPI/', routes);
 
-const port = getAppPort();
-app
-  .listen(port, () => {
-    logger.info(`APP Listen to port : ` + port);
+// ---------- DATABASE / FIXTURES ----------
+// test the database connection
+db.authenticate()
+  .then(() => {
+    logger.info('Successful authenticate to database !');
+    // create // update all table if needed
+    db.sync()
+      .then(() => {
+        logger.info('Successful database synchronisation !');
+        // insert seeds if needed
+        insertTodos().then(() => {
+          logger.info('Successful create seeds !');
+          const port = getAppPort();
+
+          // ---------- APPLICATION START ----------
+          app
+            .listen(port, () => {
+              logger.info(`APP Listen to port : ` + port);
+            })
+            .on('error', (err) => {
+              logger.crit('error :' + err);
+            });
+        });
+      })
+      .catch((error) => {
+        logger.crit(
+          'Error when trying to synchronisation with database : ' + error
+        );
+      });
   })
-  .on('error', (err) => {
-    logger.crit('error :' + err);
+  .catch((error) => {
+    logger.crit('Error when trying to connect database : ' + error);
   });
 
 export default app;

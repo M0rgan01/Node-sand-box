@@ -1,8 +1,13 @@
-import {Model, DataTypes, InferAttributes, InferCreationAttributes, CreationOptional} from '@sequelize/core';
+import {
+  Model,
+  DataTypes,
+  InferAttributes,
+  InferCreationAttributes,
+  CreationOptional,
+} from '@sequelize/core';
 import sequelize from '../sequelize';
-import logger from "../../config/logger";
 
-class Todo extends Model<InferAttributes<Todo>, InferCreationAttributes<Todo>>  {
+class Todo extends Model<InferAttributes<Todo>, InferCreationAttributes<Todo>> {
   declare id: CreationOptional<string>;
   declare title: string;
   declare complete: boolean;
@@ -30,9 +35,5 @@ Todo.init(
     sequelize,
   }
 );
-
-Todo.sync().then(() => {
-  logger.info('Table Todo created');
-});
 
 export default Todo;

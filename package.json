@@ -23,6 +23,7 @@
     "@sequelize/core": "^7.0.0-alpha.10"
   },
   "devDependencies": {
+    "sqlite3": "^5.0.2",
     "mocha": "^9.2.1",
     "sinon": "^13.0.1",
     "chai": "^4.3.6",

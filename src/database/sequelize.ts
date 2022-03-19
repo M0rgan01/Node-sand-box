@@ -1,4 +1,5 @@
 import { Sequelize, Dialect, Options } from '@sequelize/core';
+import { isProduction } from '../config/environment';
 
 const options: Options = {
   host: 'localhost',
@@ -12,6 +13,8 @@ const options: Options = {
   },
 };
 
-const db = new Sequelize('app_database', 'admin', 'password', options);
+const db = isProduction
+  ? new Sequelize('app_database', 'admin', 'password', options)
+  : new Sequelize('sqlite::memory:');
 
 export default db;
