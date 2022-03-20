@@ -1,19 +1,18 @@
-import session from 'express-session';
 import KeycloakConnect from 'keycloak-connect';
 import logger from './config/logger';
+import session from 'express-session';
 
+export const memoryStore = new session.MemoryStore();
 let keycloakInstance: KeycloakConnect.Keycloak;
 
 const keycloakConfig: KeycloakConnect.KeycloakConfig = {
-  'auth-server-url': 'http://localhost/auth',
+  'auth-server-url': 'http://localhost:8080/auth/',
   'bearer-only': true,
-  'confidential-port': '80',
-  'ssl-required': '',
+  'confidential-port': '0',
+  'ssl-required': 'external',
   realm: 'TodoRealm',
-  resource: '',
+  resource: 'TodoAPI',
 };
-
-export const memoryStore = new session.MemoryStore();
 
 export function hasAdminRole(token: KeycloakConnect.Token) {
   return token.hasRealmRole('admin');
@@ -30,7 +29,7 @@ export function getKeycloak() {
       { store: memoryStore },
       keycloakConfig
     );
-    logger.info('Keycloak instance has been created.');
+    logger.info('Keycloak instance has been created');
   }
   return keycloakInstance;
 }

@@ -2,17 +2,16 @@ import express from 'express';
 import { getKeycloak, memoryStore } from './keycloak';
 import cors from 'cors';
 import routes from './routes/routes';
-import session from 'express-session';
 import db from './database/sequelize';
 import { insertTodos } from './fixtures';
 import { getAppPort } from './config/environment';
 import logger from './config/logger';
+import { errorHandler } from './errorHandler';
+import session from 'express-session';
 
 const app = express();
 const keycloakInstance = getKeycloak();
 
-// ---------- SECURITY ----------
-app.use(cors());
 app.use(
   session({
     secret: 'some secret',
@@ -21,14 +20,17 @@ app.use(
     store: memoryStore,
   })
 );
+
+// ---------- SECURITY ----------
+app.use(cors());
 app.use(keycloakInstance.middleware());
 
 // ---------- JSON PARSED ----------
-// to support JSON-encoded bodies
-app.use(express.json);
+app.use(express.json());
 
 // ---------- ROUTING ----------
 app.use('/todoAPI/', routes);
+app.use(errorHandler);
 
 // ---------- DATABASE / FIXTURES ----------
 // test the database connection
