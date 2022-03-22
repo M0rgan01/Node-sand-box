@@ -1,17 +1,22 @@
 import KeycloakConnect from 'keycloak-connect';
 import logger from './config/logger';
 import session from 'express-session';
+import {
+  getKeycloakAuthURL,
+  getKeycloakClient,
+  getKeycloakRealm,
+} from './config/environment';
 
 export const memoryStore = new session.MemoryStore();
 let keycloakInstance: KeycloakConnect.Keycloak;
 
 const keycloakConfig: KeycloakConnect.KeycloakConfig = {
-  'auth-server-url': 'http://localhost:8080/auth/',
+  'auth-server-url': getKeycloakAuthURL(),
   'bearer-only': true,
   'confidential-port': '0',
   'ssl-required': 'external',
-  realm: 'TodoRealm',
-  resource: 'TodoAPI',
+  realm: getKeycloakRealm(),
+  resource: getKeycloakClient(),
 };
 
 export function hasAdminRole(token: KeycloakConnect.Token) {

@@ -4,7 +4,7 @@ import cors from 'cors';
 import routes from './routes/routes';
 import db from './database/sequelize';
 import { insertTodos } from './fixtures';
-import { getAppPort } from './config/environment';
+import { getAppPort, getSessionSecret } from './config/environment';
 import logger from './config/logger';
 import { errorHandler } from './errorHandler';
 import session from 'express-session';
@@ -14,7 +14,7 @@ const keycloakInstance = getKeycloak();
 
 app.use(
   session({
-    secret: 'some secret',
+    secret: getSessionSecret(),
     resave: false,
     saveUninitialized: true,
     store: memoryStore,
