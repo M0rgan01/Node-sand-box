@@ -1,4 +1,4 @@
-import { getKeycloak, hasAdminRole } from '../keycloak';
+import { getKeycloak, hasAdminRole } from '../security/keycloak';
 import express from 'express';
 import Todo from '../database/models/Todo';
 

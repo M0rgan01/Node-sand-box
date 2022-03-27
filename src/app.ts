@@ -1,5 +1,5 @@
 import express from 'express';
-import { getKeycloak, memoryStore } from './keycloak';
+import { getKeycloak, memoryStore } from './security/keycloak';
 import cors from 'cors';
 import routes from './routes/routes';
 import db from './database/sequelize';
