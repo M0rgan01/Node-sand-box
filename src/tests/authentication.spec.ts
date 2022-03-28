@@ -1,7 +1,7 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 // mock need to be imported before app
-import { mock } from './KeycloakMock';
+import { mock } from './KeycloakMock.spec';
 import app from '../app';
 
 chai.use(chaiHttp);

@@ -4,7 +4,11 @@
 
 - **node** version : 16+
 - **yarn** version : 1.22+
+
+## Dépendances optionnelles
+
 - **docker** version : 20 lors de la création du projet
+- **CLI Heroku** version : 7.60.0
 
 ## Commandes utiles
 
@@ -20,8 +24,32 @@ L'ensemble des variables d'environnements modifiable de l'application
 - KEYCLOAK_AUTH_URL -> adresse d'authentification de keycloak
 - KEYCLOAK_REALM -> royaume keycloak cible
 - KEYCLOAK_CLIENT -> client keycloak cible
-- APP_PORT -> port utilisé pour l'application
+- PORT -> port utilisé pour l'application
 - SESSION_SECRET -> secret de la session express
 
 Il est possible pour l'environnement de development d'avoir un fichier `.env` (non versionné) 
 contenant les variables d'environnements.
+
+## Déploiement Heroku
+
+Voiçi les commandes de déploiement sur Heroku :
+
+Commande de Login : 
+```
+$ heroku login -i
+```
+
+Commande de Login docker :
+```
+$ heroku container:login
+```
+
+Commande de Push de l'image (le dockerfile doit être dans le même répertoire) :
+```
+$ heroku container:push web -a { HEROKU_APP_NAME }
+```
+
+Commande de déploiement :
+```
+heroku container:release web -a { HEROKU_APP_NAME }
+```
