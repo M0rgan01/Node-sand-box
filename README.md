@@ -51,5 +51,15 @@ $ heroku container:push web -a { HEROKU_APP_NAME }
 
 Commande de déploiement :
 ```
-heroku container:release web -a { HEROKU_APP_NAME }
+$ heroku container:release web -a { HEROKU_APP_NAME }
+```
+
+Commande de récupération du token en cours d'utilisation (expiration après 1 ans ou logout de la cli) :
+```
+$ heroku auth:token
+```
+
+Commande de génération de token à longue durée de vie :
+```
+$ heroku authorizations:create
 ```
