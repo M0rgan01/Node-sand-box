@@ -17,20 +17,7 @@ describe('authentication tests', () => {
     mock.restore();
   });
 
-  it('public path should success without auth', (done) => {
-    // when
-    chai
-      .request(app)
-      .get('/todoAPI/public/info')
-      .end((err, res) => {
-        // then
-        expect(res.status).eql(200);
-        expect(res.body).eql('Healthy');
-        done();
-      });
-  });
-
-  it('private path should success with Authorization header', (done) => {
+  it('Get todos should return all database todos', (done) => {
     // when
     chai
       .request(app)
@@ -39,6 +26,7 @@ describe('authentication tests', () => {
       .end((err, res) => {
         // then
         expect(res.status).eql(200);
+        expect(res.body).to.have.lengthOf(5);
         done();
       });
   });

@@ -12,29 +12,22 @@ jobs:
     runs-on: ubuntu-latest
     env:
       APP_NAME: node-sand-box
+      IID_FILE: imageid.txt
     steps:
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+      - name: Docker Buil
+        run: docker build --iidfile ${{ env.IID_FILE  }} -t registry.heroku.com/${{ env.APP_NAME  }}/app .
 
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          registry: registry.heroku.com
-          username: _
-          password: ${{ secrets.HEROKU_TOKEN  }}
+      - name: Login to Heroku registry
+        run: docker login -u _ -p ${{ secrets.HEROKU_TOKEN  }} registry.heroku.com
 
-      - name: Build and push api
-        id: docker_build
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          tags: registry.heroku.com/${{ env.APP_NAME  }}/app
+      - name: Push image to Heroku registry
+        run: docker push registry.heroku.com/${{ env.APP_NAME  }}/app
 
-      - name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
+      - name: Show image ID
+        run: echo "Docker Image ID is $(cat ${{ env.IID_FILE  }})"
 
       - name: Release in Heroku
         run: >-
@@ -47,7 +40,7 @@ jobs:
               "updates": [ 
                 { 
                   "type": "web", 
-                  "docker_image": "${{ steps.docker_build.outputs.imageid }}" 
+                  "docker_image": "'$(cat ${{ env.IID_FILE  }})'" 
                 } 
               ]
             }'

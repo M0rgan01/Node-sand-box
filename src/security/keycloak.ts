@@ -47,7 +47,6 @@ export async function onlineMiddleware(
 ) {
   if (req.headers.authorization) {
     try {
-      // const result = await keycloakInstance.grantManager.userInfo(req.headers.authorization);
       const result = await keycloakInstance.grantManager.validateAccessToken(
         req.headers.authorization
       );

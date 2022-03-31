@@ -32,38 +32,31 @@ app.use(express.json());
 app.use('/todoAPI/', routes);
 app.use(errorHandler);
 
-// ---------- DATABASE / FIXTURES ----------
-// test the database connection
-db.authenticate()
-  .then(() => {
+(async () => {
+  // ---------- DATABASE / FIXTURES ----------
+  try {
+    await db.authenticate();
     logger.info('Successful authenticate to database !');
-    // create // update all table if needed
-    db.sync()
-      .then(() => {
-        logger.info('Successful database synchronisation !');
-        // insert seeds if needed
-        insertTodos().then(() => {
-          logger.info('Successful create seeds !');
-          const port = getAppPort();
+    await db.sync();
+    logger.info('Successful database synchronisation !');
+    await insertTodos();
+    logger.info('Successful create seeds !');
+  } catch (e) {
+    logger.error('Error when trying to init database setup : ' + e);
+    process.exit(1);
+  }
 
-          // ---------- APPLICATION START ----------
-          app
-            .listen(port, () => {
-              logger.info(`APP Listen to port : ` + port);
-            })
-            .on('error', (err) => {
-              logger.crit('error :' + err);
-            });
-        });
-      })
-      .catch((error) => {
-        logger.crit(
-          'Error when trying to synchronisation with database : ' + error
-        );
-      });
-  })
-  .catch((error) => {
-    logger.crit('Error when trying to connect database : ' + error);
-  });
+  const port = getAppPort();
+  // ---------- APPLICATION START ----------
+  app
+    .listen(port, () => {
+      logger.info(`APP Listen to port : ` + port);
+      app.emit('ready');
+    })
+    .on('error', (err) => {
+      logger.error('error : ' + err);
+      process.exit(1);
+    });
+})();
 
 export default app;
