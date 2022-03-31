@@ -8,14 +8,14 @@ on:
 jobs:
 
   build-and-publish-api:
-    name: Build front image for production
+    name: Build API image for production and push to Heroku registry
     runs-on: ubuntu-latest
     env:
       APP_NAME: node-sand-box
       IID_FILE: imageid.txt
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@master
 
       - name: Docker Buil
         run: docker build --iidfile ${{ env.IID_FILE  }} -t registry.heroku.com/${{ env.APP_NAME  }}/app .

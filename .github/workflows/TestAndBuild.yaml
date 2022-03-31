@@ -1,0 +1,55 @@
+name: Test And Build
+
+on:
+  pull_request:
+
+jobs:
+
+  prepare-env:
+    name: Prepare environnement
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Store in cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules
+
+  perform-test:
+    needs: ['prepare-env']
+    name: Test the API
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@master
+
+      - name: Restore cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules
+
+      - name: Execute tests
+        run: yarn test
+
+  build:
+    needs: ['perform-test']
+    name: Build API
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@master
+
+      - name: Restore cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules
+
+      - name: Build
+        run: yarn build
