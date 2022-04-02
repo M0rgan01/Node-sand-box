@@ -9,30 +9,30 @@ import logger from './config/logger';
 import { errorHandler } from './errorHandler';
 import session from 'express-session';
 
-const app = express();
-const keycloakInstance = getKeycloak();
+export async function createServer() {
+  const app = express();
+  const keycloakInstance = getKeycloak();
 
-app.use(
-  session({
-    secret: getSessionSecret(),
-    resave: false,
-    saveUninitialized: true,
-    store: memoryStore,
-  })
-);
+  app.use(
+    session({
+      secret: getSessionSecret(),
+      resave: false,
+      saveUninitialized: true,
+      store: memoryStore,
+    })
+  );
 
-// ---------- SECURITY ----------
-app.use(cors());
-app.use(keycloakInstance.middleware());
+  // ---------- SECURITY ----------
+  app.use(cors());
+  app.use(keycloakInstance.middleware());
 
-// ---------- JSON PARSED ----------
-app.use(express.json());
+  // ---------- JSON PARSED ----------
+  app.use(express.json());
 
-// ---------- ROUTING ----------
-app.use('/todoAPI/', routes);
-app.use(errorHandler);
+  // ---------- ROUTING ----------
+  app.use('/todoAPI/', routes);
+  app.use(errorHandler);
 
-(async () => {
   // ---------- DATABASE / FIXTURES ----------
   try {
     await db.authenticate();
@@ -46,6 +46,10 @@ app.use(errorHandler);
     process.exit(1);
   }
 
+  return app;
+}
+
+createServer().then((app) => {
   const port = getAppPort();
   // ---------- APPLICATION START ----------
   app
@@ -57,6 +61,4 @@ app.use(errorHandler);
       logger.error('error : ' + err);
       process.exit(1);
     });
-})();
-
-export default app;
+});

@@ -2,44 +2,36 @@ import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 // mock need to be imported before app
 import { mock } from './KeycloakMock.spec';
-import app from '../app';
+import { createServer } from '../app';
 
 chai.use(chaiHttp);
 
 describe('authentication tests', () => {
-  before((done) => {
-    app.on('ready', () => {
-      done();
-    });
-  });
-
   after(() => {
     mock.restore();
   });
 
-  it('public path should success without auth', (done) => {
+  it('public path should success without auth', async () => {
+    // given
+    const server = await createServer();
+
     // when
-    chai
-      .request(app)
-      .get('/todoAPI/public/info')
-      .end((err, res) => {
-        // then
-        expect(res.status).eql(200);
-        expect(res.body).eql('Healthy');
-        done();
-      });
+    const res = await chai.request(server).get('/todoAPI/public/info');
+
+    expect(res.status).eql(200);
+    expect(res.body).eql('Healthy');
   });
 
-  it('private path should success with Authorization header', (done) => {
+  it('private path should success with Authorization header', async () => {
+    // given
+    const server = await createServer();
+
     // when
-    chai
-      .request(app)
+    const res = await chai
+      .request(server)
       .get('/todoAPI/todos')
-      .set('Authorization', 'secret')
-      .end((err, res) => {
-        // then
-        expect(res.status).eql(200);
-        done();
-      });
+      .set('Authorization', 'secret');
+
+    expect(res.status).eql(200);
   });
 });
