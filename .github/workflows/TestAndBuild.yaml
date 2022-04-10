@@ -35,7 +35,7 @@ jobs:
           key: node_modules
 
       - name: Perform lint
-        run: yarn lint
+        run: yarn lint --max-warnings 0
 
   perform-test:
     needs: ['prepare-env']
