@@ -15,7 +15,7 @@ services:
     restart: always
 
   keycloak:
-    image: jboss/keycloak:12.0.2
+    image: ghcr.io/m0rgan01/keycloak-sand-box:main
     container_name: node_sand-box_keycloak
     volumes:
       - ./keycloak/imports/:/opt/jboss/keycloak/imports
@@ -32,10 +32,6 @@ services:
       KEYCLOAK_LOGLEVEL: INFO
       ROOT_LOGLEVEL: INFO
       KEYCLOAK_IMPORT: opt/jboss/keycloak/imports/realm-export.json
-    command: -Dkeycloak.profile.feature.upload_scripts=enabled
-    # This line is necessary for keycloak communication with their clients. Ex: logout...
-    extra_hosts:
-      - "localhost:host-gateway"
     depends_on:
       - keycloak_db
 
@@ -45,10 +41,6 @@ services:
     ports:
       - 8025:8025
       - 1025:1025
-    labels:
-      - traefik.enable=true
-      - traefik.http.services.mailhog.loadbalancer.server.port=8025
-      - traefik.http.routers.mailhog.rule=Host(`mailhog.localhost`)
     restart: always
 
   app_db:
