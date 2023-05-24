@@ -1,7 +1,7 @@
 import { config as loadDotEnvConfig } from 'dotenv';
 
 export const getKeycloakAuthURL = () =>
-  process.env.KEYCLOAK_AUTH_URL || 'http://localhost:8080/auth/';
+  process.env.KEYCLOAK_AUTH_URL || 'http://localhost:8080/';
 export const getKeycloakRealm = () => process.env.KEYCLOAK_REALM || 'TodoRealm';
 export const getKeycloakClient = () => process.env.KEYCLOAK_CLIENT || 'TodoAPI';
 export const getAppPort = () => process.env.PORT || 8081;
